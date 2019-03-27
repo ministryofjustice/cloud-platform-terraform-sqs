@@ -1,6 +1,6 @@
-# terraform {
-#   backend "s3" {}
-# }
+terraform {
+  backend "s3" {}
+}
 
 provider "aws" {
   region = "eu-west-1"
@@ -13,8 +13,7 @@ provider "aws" {
  *
  */
 module "example_sqs" {
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=1.0"
-  source = "../../cloud-platform-terraform-sqs"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=1.0"
 
   environment-name       = "test"
   team_name              = "cp"
