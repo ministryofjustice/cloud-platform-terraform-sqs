@@ -19,6 +19,7 @@ module "example_sqs" {
   team_name              = "cp"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
   application            = "exampleapp"
+  aws_region             = "eu-west-2"
 }
 
 resource "kubernetes_secret" "example_sqs" {

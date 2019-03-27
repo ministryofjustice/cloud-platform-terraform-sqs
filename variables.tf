@@ -55,3 +55,8 @@ variable "kms_data_key_reuse_period_seconds" {
   description = "The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours)."
   default     = 0
 }
+
+variable "aws_region" {
+  description = "variable into which the resource will be created"
+  default     = "eu-west-2"
+}
