@@ -1,17 +1,12 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-provider "aws" {
-  alias  = "london"
-  region = "${var.aws_region}"
-}
 
 resource "random_id" "id" {
   byte_length = 6
 }
 
 resource "aws_sqs_queue" "terraform_queue" {
-  provider                          = "aws.london"
   name                              = "${var.team_name}-${var.environment-name}-sqs-${random_id.id.hex}"
   visibility_timeout_seconds        = "${var.visibility_timeout_seconds}"
   message_retention_seconds         = "${var.message_retention_seconds}"
