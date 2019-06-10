@@ -28,6 +28,7 @@ module "example_sqs" {
 | receive_wait_time_seconds | Seconds for which a ReceiveMessage call will wait for a message to arrive | integer | `0` | no |
 | kms_master_key_id | The ID of an AWS-managed customer master key | string | - | no |
 | kms_data_key_reuse_period_seconds | Seconds for which Amazon SQS can reuse a data key | integer | `0` | no |
+| existing_user_name | if set, adds a policy rather than creating a new one | string | - | no |
 
 
 ### Tags
@@ -51,6 +52,7 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | secret_access_key | Secret for the new credentials. |
 | sqs_id | The URL for the created Amazon SQS queue. |
 | sqs_arn | The ARN of the SQS queue. |
+| user_name | to be used for other queues that have `existing_user_name` set |
 
 ## Reading Material
 
