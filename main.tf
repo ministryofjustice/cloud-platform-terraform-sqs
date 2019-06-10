@@ -1,7 +1,6 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
-
 resource "random_id" "id" {
   byte_length = 6
 }
@@ -26,19 +25,25 @@ resource "aws_sqs_queue" "terraform_queue" {
   }
 }
 
+locals {
+  create_user = "${replace(var.existing_user_name, "cp-sqs", "") == var.existing_user_name ? 1 : 0}"
+}
+
 resource "aws_iam_user" "user" {
-  name = "cp-sqs-${random_id.id.hex}"
-  path = "/system/sqs-user/${var.team_name}/"
+  count = "${local.create_user}"
+  name  = "cp-sqs-${random_id.id.hex}"
+  path  = "/system/sqs-user/${var.team_name}/"
 }
 
 resource "aws_iam_access_key" "key" {
-  user = "${aws_iam_user.user.name}"
+  count = "${local.create_user}"
+  user  = "${aws_iam_user.user.name}"
 }
 
 resource "aws_iam_user_policy" "userpol" {
-  name   = "${aws_iam_user.user.name}"
+  name   = "${aws_sqs_queue.terraform_queue.name}"
   policy = "${data.aws_iam_policy_document.policy.json}"
-  user   = "${aws_iam_user.user.name}"
+  user   = "${local.create_user == 1 ? join("", aws_iam_user.user.*.name) : var.existing_user_name}"
 }
 
 data "aws_iam_policy_document" "policy" {

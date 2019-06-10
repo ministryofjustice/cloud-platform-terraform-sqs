@@ -60,3 +60,8 @@ variable "aws_region" {
   description = "variable into which the resource will be created"
   default     = "eu-west-2"
 }
+
+variable "existing_user_name" {
+  description = "if set, will add access to this queue to the existing user, otherwise a new one is created"
+  default     = ""
+}
