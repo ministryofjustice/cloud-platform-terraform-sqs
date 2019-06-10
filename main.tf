@@ -26,7 +26,7 @@ resource "aws_sqs_queue" "terraform_queue" {
 }
 
 locals {
-  create_user = "${replace(var.existing_user_name, "cp-sqs", "") == var.existing_user_name ? 1 : 0}"
+  create_user = "${replace(var.existing_user_name, "cp-", "") == var.existing_user_name ? 1 : 0}"
 }
 
 resource "aws_iam_user" "user" {
