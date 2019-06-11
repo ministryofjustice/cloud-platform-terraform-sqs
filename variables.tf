@@ -65,3 +65,13 @@ variable "existing_user_name" {
   description = "if set, will add access to this queue to the existing user, otherwise a new one is created"
   default     = ""
 }
+
+variable "redrive_policy" {
+  description = "escaped JSON string to set up the Dead Letter Queue"
+  default     = ""
+}
+
+variable "policy" {
+  description = "escaped JSON string to set up access for SNS topic"
+  default     = ""
+}
