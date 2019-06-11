@@ -28,12 +28,61 @@ module "example_sqs" {
 | receive_wait_time_seconds | Seconds for which a ReceiveMessage call will wait for a message to arrive | integer | `0` | no |
 | kms_master_key_id | The ID of an AWS-managed customer master key | string | - | no |
 | kms_data_key_reuse_period_seconds | Seconds for which Amazon SQS can reuse a data key | integer | `0` | no |
-| existing_user_name | if set, adds a policy rather than creating a new one | string | - | no |
+| existing_user_name | if set, adds a policy rather than creating a new IAM user | string | - | no |
+| redrive_policy | if set, specifies the ARN of the "DeadLetter" queue | string | - | no |
 
+## Access policy
 
-### Tags
+SNS topics must be allowed access to either read or write, depending on application design, via an IAM policy (not to be confused with the policy defined along with the user if `existing_user_name` is not set).
 
-Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidence](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
+Due to [some glitch](https://github.com/hashicorp/terraform/issues/4354) in the AWS API, TF cannot create the queue policy in a single step, so a separate resource type has been defined. To use, add in the same /resources/:
+
+```
+resource "aws_sqs_queue_policy" "example_sqs_policy" {
+  queue_url = "${module.example_sqs.sqs_id}"
+
+  policy = <<EOF
+  {
+    "Version": "2012-10-17",
+    "Id": "${module.example_sqs.sqs_arn}/SQSDefaultPolicy",
+    "Statement":
+      [
+        {
+          "Effect": "Allow",
+          "Principal": {"AWS": "*"},
+          "Resource": "${module.example_sqs.sqs_arn}",
+          "Action": "SQS:SendMessage",
+          "Condition":
+            {
+              "ArnEquals":
+                {
+                  "aws:SourceArn": "${module.example_sns.topic_arn}"
+                }
+              }
+        }
+      ]
+  }
+  EOF
+}
+```
+
+Note the reference to an SNS topic, which needs to be defined in the same namespace.
+
+## Redrive policy
+
+Messages that cannot be parsed are copied to a "dead letter" queue the ARN of which can be specified inline:
+
+```
+redrive_policy = <<EOF
+  {
+    "deadLetterTargetArn": "${module.example_dead_letter_queue.sqs_arn}","maxReceiveCount": 1
+  }
+  EOF
+```
+
+## Tags
+
+Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidance](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|

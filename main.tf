@@ -14,6 +14,7 @@ resource "aws_sqs_queue" "terraform_queue" {
   receive_wait_time_seconds         = "${var.receive_wait_time_seconds}"
   kms_master_key_id                 = "${var.kms_master_key_id}"
   kms_data_key_reuse_period_seconds = "${var.kms_data_key_reuse_period_seconds}"
+  redrive_policy                    = "${var.redrive_policy}"
 
   tags {
     business-unit          = "${var.business-unit}"
