@@ -70,3 +70,7 @@ variable "redrive_policy" {
   description = "escaped JSON string to set up the Dead Letter Queue"
   default     = ""
 }
+
+variable "sqs_name" {
+  description = "name of the sqs queue"
+}
