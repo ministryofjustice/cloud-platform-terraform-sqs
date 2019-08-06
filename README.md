@@ -8,12 +8,13 @@ This Terraform module will create an AWS SQS queue and also provide the IAM cred
 
 ```hcl
 module "example_sqs" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=1.0"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=3.2"
 
   environment-name       = "example-env"
   team_name              = "cloud-platform"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
   application            = "exampleapp"
+  sqs_name               = "examplesqsname"
 }
 
 ```
@@ -92,6 +93,7 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email | string | - | yes |
 | is-production |  | string | `false` | yes |
 | team_name |  | string | - | yes |
+| sqs_name |  | string | - | yes |
 
 ## Outputs
 
@@ -102,6 +104,7 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | sqs_id | The URL for the created Amazon SQS queue. |
 | sqs_arn | The ARN of the SQS queue. |
 | user_name | to be used for other queues that have `existing_user_name` set |
+| sqs_name | The name of the SQS queue |
 
 ## Reading Material
 
