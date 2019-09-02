@@ -5,6 +5,24 @@ resource "random_id" "id" {
   byte_length = 6
 }
 
+resource "aws_kms_key" "kms" {
+  description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
+
+  tags {
+    business-unit          = "${var.business-unit}"
+    application            = "${var.application}"
+    is-production          = "${var.is-production}"
+    environment-name       = "${var.environment-name}"
+    owner                  = "${var.team_name}"
+    infrastructure-support = "${var.infrastructure-support}"
+  }
+}
+
+resource "aws_kms_alias" "alias" {
+  name          = "alias/${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  target_key_id = "${aws_kms_key.kms.key_id}"
+}
+
 resource "aws_sqs_queue" "terraform_queue" {
   name                              = "${var.team_name}-${var.environment-name}-${var.sqs_name}"
   visibility_timeout_seconds        = "${var.visibility_timeout_seconds}"
@@ -12,7 +30,7 @@ resource "aws_sqs_queue" "terraform_queue" {
   max_message_size                  = "${var.max_message_size}"
   delay_seconds                     = "${var.delay_seconds}"
   receive_wait_time_seconds         = "${var.receive_wait_time_seconds}"
-  kms_master_key_id                 = "${var.kms_master_key_id}"
+  kms_master_key_id                 = "${aws_kms_key.kms.arn}"
   kms_data_key_reuse_period_seconds = "${var.kms_data_key_reuse_period_seconds}"
   redrive_policy                    = "${var.redrive_policy}"
 
