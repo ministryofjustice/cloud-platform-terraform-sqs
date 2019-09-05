@@ -7,16 +7,49 @@ resource "random_id" "id" {
 
 resource "aws_kms_key" "kms" {
   description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
-  policy      = "${var.kms_key_policy}"
 
-  tags {
-    business-unit          = "${var.business-unit}"
-    application            = "${var.application}"
-    is-production          = "${var.is-production}"
-    environment-name       = "${var.environment-name}"
-    owner                  = "${var.team_name}"
-    infrastructure-support = "${var.infrastructure-support}"
+  policy = <<EOF
+  {
+    "Version": "2012-10-17",
+    "Id": "key-policy",
+    "Statement": [
+      {
+        "Sid": "Allow administration of the key",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        },
+         "Action": [
+            "kms:Create*",
+            "kms:Describe*",
+            "kms:Enable*",
+            "kms:List*",
+            "kms:Put*",
+            "kms:Update*",
+            "kms:Revoke*",
+            "kms:Disable*",
+            "kms:Get*",
+            "kms:Delete*",
+            "kms:ScheduleKeyDeletion",
+            "kms:CancelKeyDeletion"
+         ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "Allow use of the key",
+        "Effect": "Allow",
+        "Principal": {
+        "Service": "sns.amazonaws.com"
+        },
+         "Action": [
+            "kms:GenerateDataKey*",
+            "kms:Decrypt"
+         ],
+        "Resource": "*"
+      }
+    ]
   }
+EOF
 }
 
 resource "aws_kms_alias" "alias" {
