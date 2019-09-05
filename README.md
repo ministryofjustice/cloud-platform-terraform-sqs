@@ -15,23 +15,6 @@ module "example_sqs" {
   infrastructure-support = "example-team@digtal.justice.gov.uk"
   application            = "exampleapp"
   sqs_name               = "examplesqsname"
-  kms_key_policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Id": "key-policy",
-    "Statement": [
-      {
-        "Sid": "Enable Permissions",
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": "*"
-        },
-        "Action": "kms:*",
-        "Resource": "*"
-      }
-    ]
-  }
-EOF
 }
 
 ```
@@ -111,7 +94,6 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | is-production |  | string | `false` | yes |
 | team_name |  | string | - | yes |
 | sqs_name |  | string | - | yes |
-| kms_key_policy | Policy for kms_key | string | - | No |
 
 ## Outputs
 
