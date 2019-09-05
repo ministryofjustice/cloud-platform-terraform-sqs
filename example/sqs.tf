@@ -12,31 +12,6 @@ module "example_sqs" {
   providers = {
     aws = "aws.london"
   }
-
-  /*
-  *  SQS SSE enabled with AWS Key Management Service (KMS), using default policy. 
-  *  Using the example below, follow the guidance (https://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html) to create your own policy.
-  *  
-
-  kms_key_policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Id": "key-policy",
-    "Statement": [
-      {
-        "Sid": "Enable Permissions",
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": "*"
-        },
-        "Action": "kms:*",
-        "Resource": "*"
-      }
-    ]
-  }
-EOF
-*/
-
 }
 
 resource "kubernetes_secret" "example_sqs" {
