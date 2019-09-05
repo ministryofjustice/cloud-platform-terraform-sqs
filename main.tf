@@ -7,6 +7,7 @@ resource "random_id" "id" {
 
 resource "aws_kms_key" "kms" {
   description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  policy      = "${var.kms_key_policy}"
 
   tags {
     business-unit          = "${var.business-unit}"

@@ -69,3 +69,8 @@ variable "redrive_policy" {
 variable "sqs_name" {
   description = "name of the sqs queue"
 }
+
+variable "kms_key_policy" {
+  description = "Policy for kms_key"
+  default     = ""
+}
