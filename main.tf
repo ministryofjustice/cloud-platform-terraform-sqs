@@ -46,18 +46,6 @@ resource "aws_kms_key" "kms" {
             "kms:Decrypt"
          ],
         "Resource": "*"
-      },
-      {
-          "Sid": "Allow SQS tor ead its own messages",
-          "Effect": "Allow",
-          "Principal": {
-              "Service": "sqs.amazonaws.com"
-          },
-          "Action": [
-              "kms:GenerateDataKey*",
-              "kms:Decrypt"
-          ],
-          "Resource": "*"
       }
     ]
   }
@@ -121,4 +109,16 @@ data "aws_iam_policy_document" "policy" {
       "${aws_sqs_queue.terraform_queue.arn}",
     ]
   }
+
+  statement {
+    actions = [
+      "kms:GenerateDataKey*",
+      "kms:Decrypt"
+    ]
+
+    resources = [
+      "*",
+    ]
+  }
+ 
 }
