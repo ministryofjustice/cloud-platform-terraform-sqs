@@ -36,7 +36,7 @@ resource "aws_kms_key" "kms" {
         "Resource": "*"
       },
       {
-        "Sid": "Allow use of the key",
+        "Sid": "Allow SNS use of the key",
         "Effect": "Allow",
         "Principal": {
         "Service": "sns.amazonaws.com"
@@ -46,6 +46,18 @@ resource "aws_kms_key" "kms" {
             "kms:Decrypt"
          ],
         "Resource": "*"
+      },
+      {
+          "Sid": "Allow SQS tor ead its own messages",
+          "Effect": "Allow",
+          "Principal": {
+              "Service": "sqs.amazonaws.com"
+          },
+          "Action": [
+              "kms:GenerateDataKey*",
+              "kms:Decrypt"
+          ],
+          "Resource": "*"
       }
     ]
   }
