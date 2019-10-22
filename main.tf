@@ -39,13 +39,18 @@ resource "aws_kms_key" "kms" {
         "Sid": "Allow SNS use of the key",
         "Effect": "Allow",
         "Principal": {
-        "Service": "sns.amazonaws.com"
+          "AWS": "*"
         },
          "Action": [
             "kms:GenerateDataKey*",
             "kms:Decrypt"
          ],
-        "Resource": "*"
+        "Resource": "*",
+        "Condition": {
+            "StringEquals": {
+                "kms:CallerAccount": "${data.aws_caller_identity.current.account_id}"
+            }
+        }
       }
     ]
   }
@@ -107,17 +112,6 @@ data "aws_iam_policy_document" "policy" {
 
     resources = [
       "${aws_sqs_queue.terraform_queue.arn}",
-    ]
-  }
-
-  statement {
-    actions = [
-      "kms:GenerateDataKey*",
-      "kms:Decrypt"
-    ]
-
-    resources = [
-      "*",
     ]
   }
  
