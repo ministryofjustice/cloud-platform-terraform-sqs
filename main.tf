@@ -39,6 +39,18 @@ resource "aws_kms_key" "kms" {
         "Sid": "Allow SNS use of the key",
         "Effect": "Allow",
         "Principal": {
+          "Service": "sns.amazonaws.com"
+        },
+         "Action": [
+            "kms:GenerateDataKey*",
+            "kms:Decrypt"
+         ],
+        "Resource": "*"
+      },
+      {
+        "Sid": "Allow IAM use of the key",
+        "Effect": "Allow",
+        "Principal": {
           "AWS": "*"
         },
          "Action": [
