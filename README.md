@@ -31,6 +31,7 @@ module "example_sqs" {
 | kms_data_key_reuse_period_seconds | Seconds for which Amazon SQS can reuse a data key | integer | `0` | no |
 | existing_user_name | if set, adds a policy rather than creating a new IAM user | string | - | no |
 | redrive_policy | if set, specifies the ARN of the "DeadLetter" queue | string | - | no |
+| encrypt_sqs_kms | if set to true, it enables SSE for SQS using KMS key | string | `false` | no |
 
 ## Access policy
 
