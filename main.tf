@@ -7,6 +7,7 @@ resource "random_id" "id" {
 
 resource "aws_kms_key" "kms" {
   description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  count       = "${var.encrypt_sqs_kms == "true" ? 1 : 0}"
 
   policy = <<EOF
   {
@@ -70,6 +71,7 @@ EOF
 }
 
 resource "aws_kms_alias" "alias" {
+  count         = "${var.encrypt_sqs_kms == "true" ? 1 : 0}"
   name          = "alias/${var.team_name}-${var.environment-name}-${var.sqs_name}"
   target_key_id = "${aws_kms_key.kms.key_id}"
 }
@@ -81,8 +83,8 @@ resource "aws_sqs_queue" "terraform_queue" {
   max_message_size                  = "${var.max_message_size}"
   delay_seconds                     = "${var.delay_seconds}"
   receive_wait_time_seconds         = "${var.receive_wait_time_seconds}"
-  kms_master_key_id                 = "${aws_kms_key.kms.arn}"
   kms_data_key_reuse_period_seconds = "${var.kms_data_key_reuse_period_seconds}"
+  kms_master_key_id                 = "${var.encrypt_sqs_kms == "true" ? join("", aws_kms_key.kms.*.arn) : ""}"
   redrive_policy                    = "${var.redrive_policy}"
 
   tags {
@@ -126,5 +128,5 @@ data "aws_iam_policy_document" "policy" {
       "${aws_sqs_queue.terraform_queue.arn}",
     ]
   }
- 
+  
 }
