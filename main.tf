@@ -1,4 +1,5 @@
 data "aws_caller_identity" "current" {}
+
 data "aws_region" "current" {}
 
 resource "random_id" "id" {
@@ -7,7 +8,7 @@ resource "random_id" "id" {
 
 resource "aws_kms_key" "kms" {
   description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
-  count       = "${var.encrypt_sqs_kms == "true" ? 1 : 0}"
+  count       = var.encrypt_sqs_kms ? 1 : 0
 
   policy = <<EOF
   {
@@ -68,54 +69,55 @@ resource "aws_kms_key" "kms" {
     ]
   }
 EOF
+
 }
 
 resource "aws_kms_alias" "alias" {
-  count         = "${var.encrypt_sqs_kms == "true" ? 1 : 0}"
+  count         = var.encrypt_sqs_kms ? 1 : 0
   name          = "alias/${var.team_name}-${var.environment-name}-${var.sqs_name}"
-  target_key_id = "${aws_kms_key.kms.key_id}"
+  target_key_id = aws_kms_key.kms[0].key_id
 }
 
 resource "aws_sqs_queue" "terraform_queue" {
   name                              = "${var.team_name}-${var.environment-name}-${var.sqs_name}"
-  visibility_timeout_seconds        = "${var.visibility_timeout_seconds}"
-  message_retention_seconds         = "${var.message_retention_seconds}"
-  max_message_size                  = "${var.max_message_size}"
-  delay_seconds                     = "${var.delay_seconds}"
-  receive_wait_time_seconds         = "${var.receive_wait_time_seconds}"
-  kms_data_key_reuse_period_seconds = "${var.kms_data_key_reuse_period_seconds}"
-  kms_master_key_id                 = "${var.encrypt_sqs_kms == "true" ? join("", aws_kms_key.kms.*.arn) : ""}"
-  redrive_policy                    = "${var.redrive_policy}"
+  visibility_timeout_seconds        = var.visibility_timeout_seconds
+  message_retention_seconds         = var.message_retention_seconds
+  max_message_size                  = var.max_message_size
+  delay_seconds                     = var.delay_seconds
+  receive_wait_time_seconds         = var.receive_wait_time_seconds
+  kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
+  kms_master_key_id                 = var.encrypt_sqs_kms ? join("", aws_kms_key.kms.*.arn) : ""
+  redrive_policy                    = var.redrive_policy
 
-  tags {
-    business-unit          = "${var.business-unit}"
-    application            = "${var.application}"
-    is-production          = "${var.is-production}"
-    environment-name       = "${var.environment-name}"
-    owner                  = "${var.team_name}"
-    infrastructure-support = "${var.infrastructure-support}"
+  tags = {
+    business-unit          = var.business-unit
+    application            = var.application
+    is-production          = var.is-production
+    environment-name       = var.environment-name
+    owner                  = var.team_name
+    infrastructure-support = var.infrastructure-support
   }
 }
 
 locals {
-  create_user = "${replace(var.existing_user_name, "cp-", "") == var.existing_user_name ? 1 : 0}"
+  create_user = replace(var.existing_user_name, "cp-", "") == var.existing_user_name ? 1 : 0
 }
 
 resource "aws_iam_user" "user" {
-  count = "${local.create_user}"
+  count = local.create_user
   name  = "cp-sqs-${random_id.id.hex}"
   path  = "/system/sqs-user/${var.team_name}/"
 }
 
 resource "aws_iam_access_key" "key" {
-  count = "${local.create_user}"
-  user  = "${aws_iam_user.user.name}"
+  count = local.create_user
+  user  = aws_iam_user.user[0].name
 }
 
 resource "aws_iam_user_policy" "userpol" {
-  name   = "${aws_sqs_queue.terraform_queue.name}"
-  policy = "${data.aws_iam_policy_document.policy.json}"
-  user   = "${local.create_user == 1 ? join("", aws_iam_user.user.*.name) : var.existing_user_name}"
+  name   = aws_sqs_queue.terraform_queue.name
+  policy = data.aws_iam_policy_document.policy.json
+  user   = local.create_user == 1 ? join("", aws_iam_user.user.*.name) : var.existing_user_name
 }
 
 data "aws_iam_policy_document" "policy" {
@@ -125,8 +127,8 @@ data "aws_iam_policy_document" "policy" {
     ]
 
     resources = [
-      "${aws_sqs_queue.terraform_queue.arn}",
+      aws_sqs_queue.terraform_queue.arn,
     ]
   }
-  
 }
+
