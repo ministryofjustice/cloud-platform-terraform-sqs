@@ -8,7 +8,7 @@ This Terraform module will create an AWS SQS queue and also provide the IAM cred
 
 ```hcl
 module "example_sqs" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=3.2"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=3.5"
 
   environment-name       = "example-env"
   team_name              = "cloud-platform"

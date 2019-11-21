@@ -72,5 +72,7 @@ variable "sqs_name" {
 
 variable "encrypt_sqs_kms" {
   description = "If set to true, this will create aws_kms_key and aws_kms_alias resources and add kms_master_key_id in aws_sqs_queue resource"
-  default     = "false"
+  type        = bool
+  default     = false
 }
+
