@@ -20,6 +20,15 @@ module "example_sqs" {
   encrypt_sqs_kms = "false"
 
   # existing_user_name     = module.another_sqs_instance.user_name
+  
+  # NB: If you want multiple queues to share an IAM user, you must create one queue first,
+  # letting it create the IAM user. Then, in a separate PR, you can create all the other
+  # queues. Otherwise terraform cannot resolve the cyclic dependency of creating multiple
+  # queues but one IAM user, because it cannot work out which queue will successfully
+  # create the user, and which queues will reuse that user.
+  # You can also resolve this by adding explicit `depends_on` clauses, so that all the
+  # other queues in a 'set' depend on one queue. That queue will be created first, and
+  # will create the IAM user which all the other queues will 'inherit'.
 
   providers = {
     aws = aws.london
