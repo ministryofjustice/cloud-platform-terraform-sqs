@@ -26,9 +26,6 @@ module "example_sqs" {
   # queues. Otherwise terraform cannot resolve the cyclic dependency of creating multiple
   # queues but one IAM user, because it cannot work out which queue will successfully
   # create the user, and which queues will reuse that user.
-  # You can also resolve this by adding explicit `depends_on` clauses, so that all the
-  # other queues in a 'set' depend on one queue. That queue will be created first, and
-  # will create the IAM user which all the other queues will 'inherit'.
 
   providers = {
     aws = aws.london
