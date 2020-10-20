@@ -96,6 +96,7 @@ resource "aws_sqs_queue" "terraform_queue" {
     environment-name       = var.environment-name
     owner                  = var.team_name
     infrastructure-support = var.infrastructure-support
+    namespace              = var.namespace
   }
 }
 

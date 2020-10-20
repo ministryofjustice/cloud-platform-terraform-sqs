@@ -6,6 +6,7 @@ module "example_sqs" {
   infrastructure-support = "example-team@digtal.justice.gov.uk"
   application            = "exampleapp"
   sqs_name               = "examplesqsname"
+  namespace              = var.namespace
 
   # Set encrypt_sqs_kms = "true", to enable SSE for SQS using KMS key.
   encrypt_sqs_kms = "false"

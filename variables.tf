@@ -5,6 +5,9 @@ variable "business-unit" {
   default     = "mojdigital"
 }
 
+variable "namespace" {
+}
+
 variable "team_name" {
   description = "The name of your development team"
 }
