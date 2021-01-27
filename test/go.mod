@@ -1,4 +1,4 @@
-module github.com/ministryofjustice/cloud-platform-terraform-s3-bucket
+module github.com/ministryofjustice/cloud-platform-terraform-sqs
 
 go 1.15
 
