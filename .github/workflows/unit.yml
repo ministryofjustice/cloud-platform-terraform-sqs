@@ -10,7 +10,7 @@ jobs:
       localstack:
         image: localstack/localstack:latest
         env:
-          SERVICES: iam,sts,s3
+          SERVICES: iam,sts,sqs
           DEFAULT_REGION: eu-west-2
         ports:
           - 4566:4566

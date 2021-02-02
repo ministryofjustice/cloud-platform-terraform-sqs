@@ -21,7 +21,7 @@ func TestSQSCreation(t *testing.T) {
 	sqsArn := terraform.Output(t, terraformOptions, "sqs_arn")
 	sqsName := terraform.Output(t, terraformOptions, "sqs_name")
 
-	assert.Equal(t, "arn:aws:sqs:eu-west-2:418216798584:cloud-platform-development-unit-test", sqsArn)
+	assert.Equal(t, "arn:aws:sqs:eu-west-2:000000000000:cloud-platform-development-unit-test", sqsArn)
 	assert.Equal(t, "cloud-platform-development-unit-test", sqsName)
 
 }
