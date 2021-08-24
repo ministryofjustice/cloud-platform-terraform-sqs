@@ -101,5 +101,70 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 - https://docs.aws.amazon.com/sqs/
 
 <!--- BEGIN_TF_DOCS --->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.14 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+| random | n/a |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) |
+| [aws_iam_access_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_iam_user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) |
+| [aws_iam_user_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) |
+| [aws_kms_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_sqs_queue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| application | n/a | `any` | n/a | yes |
+| aws\_region | variable into which the resource will be created | `string` | `"eu-west-2"` | no |
+| business-unit | Area of the MOJ responsible for the service. | `string` | `"mojdigital"` | no |
+| delay\_seconds | The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). | `string` | `"0"` | no |
+| encrypt\_sqs\_kms | If set to true, this will create aws\_kms\_key and aws\_kms\_alias resources and add kms\_master\_key\_id in aws\_sqs\_queue resource | `bool` | `false` | no |
+| environment-name | The type of environment you're deploying to. | `any` | n/a | yes |
+| existing\_user\_name | if set, will add access to this queue to the existing user, otherwise a new one is created | `string` | `""` | no |
+| infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email. | `any` | n/a | yes |
+| is-production | n/a | `string` | `"false"` | no |
+| kms\_data\_key\_reuse\_period\_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | `number` | `300` | no |
+| max\_message\_size | The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). | `string` | `"262144"` | no |
+| message\_retention\_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | `string` | `"345600"` | no |
+| namespace | n/a | `any` | n/a | yes |
+| receive\_wait\_time\_seconds | The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning. An integer from 0 to 20 (seconds). | `string` | `"0"` | no |
+| redrive\_policy | escaped JSON string to set up the Dead Letter Queue | `string` | `""` | no |
+| sqs\_name | name of the sqs queue | `any` | n/a | yes |
+| team\_name | The name of your development team | `any` | n/a | yes |
+| visibility\_timeout\_seconds | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). | `string` | `"30"` | no |
+
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| access\_key\_id | Access key id for the credentials |
+| secret\_access\_key | Secret for the new credentials |
+| sqs\_arn | The ARN of the SQS queue. |
+| sqs\_id | The URL for the created Amazon SQS queue. |
+| sqs\_name | The name of the SQS queue. |
+| user\_name | IAM user with access to the queue |
 
 <!--- END_TF_DOCS --->
