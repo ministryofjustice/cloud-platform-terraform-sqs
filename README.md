@@ -33,21 +33,6 @@ module "example_sqs" {
 }
 
 ```
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| visibility_timeout_seconds | The visibility timeout for the queue | integer | `30` | no |
-| message_retention_seconds | The number of seconds Amazon SQS retains a message| integer | `345600` | no |
-| max_message_size | Max message size in bytes | integer | `262144` | no |
-| delay_seconds | Seconds that message will be delayed for | integer | `0` | no |
-| receive_wait_time_seconds | Seconds for which a ReceiveMessage call will wait for a message to arrive | integer | `0` | no |
-| kms_master_key_id | The ID of an AWS-managed customer master key | string | - | no |
-| kms_data_key_reuse_period_seconds | Seconds for which Amazon SQS can reuse a data key | integer | `0` | no |
-| existing_user_name | if set, adds a policy rather than creating a new IAM user | string | - | no |
-| redrive_policy | if set, specifies the ARN of the "DeadLetter" queue | string | - | no |
-| encrypt_sqs_kms | if set to true, it enables SSE for SQS using KMS key | string | `false` | no |
-
 ## Access policy
 
 SNS topics must be allowed access to either read or write, depending on application design, via an IAM policy (not to be confused with the policy defined along with the user if `existing_user_name` is not set).
@@ -111,17 +96,75 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | team_name |  | string | - | yes |
 | sqs_name |  | string | - | yes |
 
+## Reading Material
+
+- https://docs.aws.amazon.com/sqs/
+
+<!--- BEGIN_TF_DOCS --->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.14 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| aws | n/a |
+| random | n/a |
+
+## Modules
+
+No Modules.
+
+## Resources
+
+| Name |
+|------|
+| [aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) |
+| [aws_iam_access_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_access_key) |
+| [aws_iam_policy_document](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) |
+| [aws_iam_user](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user) |
+| [aws_iam_user_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_user_policy) |
+| [aws_kms_alias](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_alias) |
+| [aws_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) |
+| [aws_region](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) |
+| [aws_sqs_queue](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sqs_queue) |
+| [random_id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) |
+
+## Inputs
+
+| Name | Description | Type | Default | Required |
+|------|-------------|------|---------|:--------:|
+| application | n/a | `any` | n/a | yes |
+| aws\_region | variable into which the resource will be created | `string` | `"eu-west-2"` | no |
+| business-unit | Area of the MOJ responsible for the service. | `string` | `"mojdigital"` | no |
+| delay\_seconds | The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). | `string` | `"0"` | no |
+| encrypt\_sqs\_kms | If set to true, this will create aws\_kms\_key and aws\_kms\_alias resources and add kms\_master\_key\_id in aws\_sqs\_queue resource | `bool` | `false` | no |
+| environment-name | The type of environment you're deploying to. | `any` | n/a | yes |
+| existing\_user\_name | if set, will add access to this queue to the existing user, otherwise a new one is created | `string` | `""` | no |
+| infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email. | `any` | n/a | yes |
+| is-production | n/a | `string` | `"false"` | no |
+| kms\_data\_key\_reuse\_period\_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | `number` | `300` | no |
+| max\_message\_size | The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). | `string` | `"262144"` | no |
+| message\_retention\_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | `string` | `"345600"` | no |
+| namespace | n/a | `any` | n/a | yes |
+| receive\_wait\_time\_seconds | The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning. An integer from 0 to 20 (seconds). | `string` | `"0"` | no |
+| redrive\_policy | escaped JSON string to set up the Dead Letter Queue | `string` | `""` | no |
+| sqs\_name | name of the sqs queue | `any` | n/a | yes |
+| team\_name | The name of your development team | `any` | n/a | yes |
+| visibility\_timeout\_seconds | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). | `string` | `"30"` | no |
+
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| access_key_id | Access key id for the credentials. |
-| secret_access_key | Secret for the new credentials. |
-| sqs_id | The URL for the created Amazon SQS queue. |
-| sqs_arn | The ARN of the SQS queue. |
-| user_name | to be used for other queues that have `existing_user_name` set |
-| sqs_name | The name of the SQS queue |
+| access\_key\_id | Access key id for the credentials |
+| secret\_access\_key | Secret for the new credentials |
+| sqs\_arn | The ARN of the SQS queue. |
+| sqs\_id | The URL for the created Amazon SQS queue. |
+| sqs\_name | The name of the SQS queue. |
+| user\_name | IAM user with access to the queue |
 
-## Reading Material
-
-- https://docs.aws.amazon.com/sqs/
+<!--- END_TF_DOCS --->
