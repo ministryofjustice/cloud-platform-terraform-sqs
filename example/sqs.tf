@@ -1,6 +1,7 @@
 module "example_sqs" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.1"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=fifo"
 
+  sqs_name               = "example_sqs_name"
   team_name              = var.team_name
   business-unit          = var.business_unit
   application            = var.application
