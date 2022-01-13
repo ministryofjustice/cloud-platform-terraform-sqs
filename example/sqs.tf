@@ -1,5 +1,7 @@
 module "example_sqs" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=fifo"
+  # remember to check the latest version
+  # source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.1"
+  source = "../"
 
   sqs_name               = "example_sqs_name"
   fifo_queue             = false
