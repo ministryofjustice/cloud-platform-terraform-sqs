@@ -1,11 +1,12 @@
 module "example_sqs" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.0"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.1"
 
-  environment-name       = "test"
-  team_name              = "cp"
-  infrastructure-support = "example-team@digtal.justice.gov.uk"
-  application            = "exampleapp"
-  sqs_name               = "examplesqsname"
+  team_name              = var.team_name
+  business-unit          = var.business_unit
+  application            = var.application
+  is-production          = var.is_production
+  environment-name       = var.environment
+  infrastructure-support = var.infrastructure_support
   namespace              = var.namespace
 
   # Set encrypt_sqs_kms = "true", to enable SSE for SQS using KMS key.
@@ -21,7 +22,7 @@ module "example_sqs" {
 resource "kubernetes_secret" "example_sqs" {
   metadata {
     name      = "example-sqs"
-    namespace = "example-team"
+    namespace = var.namespace
   }
 
   data = {
