@@ -144,6 +144,7 @@ No Modules.
 | encrypt\_sqs\_kms | If set to true, this will create aws\_kms\_key and aws\_kms\_alias resources and add kms\_master\_key\_id in aws\_sqs\_queue resource | `bool` | `false` | no |
 | environment-name | The type of environment you're deploying to. | `any` | n/a | yes |
 | existing\_user\_name | if set, will add access to this queue to the existing user, otherwise a new one is created | `string` | `""` | no |
+| fifo\_queue | FIFO means exactly-once processing. Duplicates are not introduced into the queue. | `bool` | `false` | no |
 | infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email. | `any` | n/a | yes |
 | is-production | n/a | `string` | `"false"` | no |
 | kms\_data\_key\_reuse\_period\_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | `number` | `300` | no |
