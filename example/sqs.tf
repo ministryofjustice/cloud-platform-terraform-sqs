@@ -4,6 +4,7 @@ module "example_sqs" {
   source = "../"
 
   sqs_name               = "example_sqs_name"
+  # if true, the sqs_name above must end with ".fifo", it's an API quirk
   fifo_queue             = false
   team_name              = var.team_name
   business-unit          = var.business_unit
