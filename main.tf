@@ -100,6 +100,7 @@ resource "aws_sqs_queue" "terraform_queue" {
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
   kms_master_key_id                 = var.encrypt_sqs_kms ? join("", aws_kms_key.kms.*.arn) : ""
   redrive_policy                    = var.redrive_policy
+  fifo_queue                        = var.fifo_queue
 
   tags = {
     business-unit          = var.business-unit

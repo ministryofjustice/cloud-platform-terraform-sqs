@@ -79,3 +79,8 @@ variable "encrypt_sqs_kms" {
   default     = false
 }
 
+variable "fifo_queue" {
+  description = "FIFO means exactly-once processing. Duplicates are not introduced into the queue."
+  type        = bool
+  default     = false
+}
