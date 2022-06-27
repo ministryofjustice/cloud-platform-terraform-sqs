@@ -54,6 +54,12 @@ variable "kms_data_key_reuse_period_seconds" {
   default     = 300
 }
 
+variable "kms_external_access" {
+  description = "A list of external AWS principals (e.g. account ids, or IAM roles) that can access the KMS key, to enable cross-account message decryption."
+  type        = list(string)
+  default     = []
+}
+
 variable "aws_region" {
   description = "variable into which the resource will be created"
   default     = "eu-west-2"

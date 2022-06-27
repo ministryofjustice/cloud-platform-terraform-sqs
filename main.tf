@@ -76,6 +76,18 @@ resource "aws_kms_key" "kms" {
             "kms:CallerAccount" = data.aws_caller_identity.current.account_id
           }
         }
+      },
+      {
+        Sid    = "Allow cross-account use of the key"
+        Effect = "Allow"
+        Principal = {
+          AWS = var.kms_external_access
+        },
+        Action = [
+          "kms:GenerateDataKey*",
+          "kms:Decrypt"
+        ],
+        Resource = "*"
       }
     ]
   })
