@@ -10,78 +10,75 @@ resource "aws_kms_key" "kms" {
   description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
   count       = var.encrypt_sqs_kms ? 1 : 0
 
-  policy = <<EOF
-  {
-    "Version": "2012-10-17",
-    "Id": "key-policy",
-    "Statement": [
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "key-policy"
+    Statement = [
       {
-        "Sid": "Allow administration of the key",
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        Sid    = "Allow administration of the key"
+        Effect = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
         },
-         "Action": [
-            "kms:Create*",
-            "kms:Describe*",
-            "kms:Enable*",
-            "kms:List*",
-            "kms:Put*",
-            "kms:Update*",
-            "kms:Revoke*",
-            "kms:Disable*",
-            "kms:Get*",
-            "kms:Delete*",
-            "kms:ScheduleKeyDeletion",
-            "kms:CancelKeyDeletion"
-         ],
-        "Resource": "*"
+        Action = [
+          "kms:Create*",
+          "kms:Describe*",
+          "kms:Enable*",
+          "kms:List*",
+          "kms:Put*",
+          "kms:Update*",
+          "kms:Revoke*",
+          "kms:Disable*",
+          "kms:Get*",
+          "kms:Delete*",
+          "kms:ScheduleKeyDeletion",
+          "kms:CancelKeyDeletion"
+        ],
+        Resource = "*"
       },
       {
-        "Sid": "Allow s3 use of the key",
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "s3.amazonaws.com"
+        Sid    = "Allow s3 use of the key"
+        Effect = "Allow"
+        Principal = {
+          Service = "s3.amazonaws.com"
         },
-         "Action": [
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-        "Resource": "*"
+        Action = [
+          "kms:GenerateDataKey*",
+          "kms:Decrypt"
+        ],
+        Resource = "*"
       },
       {
-        "Sid": "Allow SNS use of the key",
-        "Effect": "Allow",
-        "Principal": {
-          "Service": "sns.amazonaws.com"
+        Sid    = "Allow SNS use of the key"
+        Effect = "Allow"
+        Principal = {
+          Service = "sns.amazonaws.com"
         },
-         "Action": [
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-        "Resource": "*"
+        Action = [
+          "kms:GenerateDataKey*",
+          "kms:Decrypt"
+        ],
+        Resource = "*"
       },
       {
-        "Sid": "Allow IAM use of the key",
-        "Effect": "Allow",
-        "Principal": {
-          "AWS": "*"
+        Sid    = "Allow IAM use of the key"
+        Effect = "Allow"
+        Principal = {
+          AWS = "*"
         },
-         "Action": [
-            "kms:GenerateDataKey*",
-            "kms:Decrypt"
-         ],
-        "Resource": "*",
-        "Condition": {
-            "StringEquals": {
-                "kms:CallerAccount": "${data.aws_caller_identity.current.account_id}"
-            }
+        Action = [
+          "kms:GenerateDataKey*",
+          "kms:Decrypt"
+        ],
+        Resource = "*"
+        Condition = {
+          StringEquals = {
+            "kms:CallerAccount" = data.aws_caller_identity.current.account_id
+          }
         }
       }
     ]
-  }
-EOF
-
+  })
 }
 
 resource "aws_kms_alias" "alias" {
