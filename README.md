@@ -148,6 +148,7 @@ No Modules.
 | infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email. | `any` | n/a | yes |
 | is-production | n/a | `string` | `"false"` | no |
 | kms\_data\_key\_reuse\_period\_seconds | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | `number` | `300` | no |
+| kms\_external\_access | A list of external AWS principals (e.g. account ids, or IAM roles) that can access the KMS key, to enable cross-account message decryption. | `list(string)` | `[]` | no |
 | max\_message\_size | The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). | `string` | `"262144"` | no |
 | message\_retention\_seconds | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | `string` | `"345600"` | no |
 | namespace | n/a | `any` | n/a | yes |
