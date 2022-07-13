@@ -85,7 +85,9 @@ resource "aws_kms_key" "kms" {
         },
         Action = [
           "kms:GenerateDataKey*",
-          "kms:Decrypt"
+          "kms:DescribeKey",
+          "kms:Decrypt",
+          "kms:Encrypt"
         ],
         Resource = "*"
       }
