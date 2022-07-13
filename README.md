@@ -137,7 +137,6 @@ No Modules.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | application | n/a | `any` | n/a | yes |
-| aws\_region | variable into which the resource will be created | `string` | `"eu-west-2"` | no |
 | business-unit | Area of the MOJ responsible for the service. | `string` | `"mojdigital"` | no |
 | delay\_seconds | The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes). | `string` | `"0"` | no |
 | encrypt\_sqs\_kms | If set to true, this will create aws\_kms\_key and aws\_kms\_alias resources and add kms\_master\_key\_id in aws\_sqs\_queue resource | `bool` | `false` | no |
