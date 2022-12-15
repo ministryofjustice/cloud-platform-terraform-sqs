@@ -81,7 +81,7 @@ resource "aws_kms_key" "kms" {
         Sid    = "Allow cross-account use of the key"
         Effect = "Allow"
         Principal = {
-          AWS = length(var.kms_external_access) >=1 ? var.kms_external_access : ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
+          AWS = length(var.kms_external_access) >= 1 ? var.kms_external_access : ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
         },
         Action = [
           "kms:GenerateDataKey*",
