@@ -30,7 +30,9 @@ resource "aws_kms_key" "kms" {
           "kms:Get*",
           "kms:Delete*",
           "kms:ScheduleKeyDeletion",
-          "kms:CancelKeyDeletion"
+          "kms:CancelKeyDeletion",
+          "kms:TagResource",
+          "kms:UntagResource"
         ],
         Resource = "*"
       },
