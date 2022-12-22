@@ -1,6 +1,6 @@
 module "example_sqs" {
   # remember to check the latest version
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.9"
+  # source = "github.com/ministryofjustice/cloud-platform-terraform-sqs?ref=4.9.1"
   source = "../"
 
   sqs_name               = "example_sqs_name"
