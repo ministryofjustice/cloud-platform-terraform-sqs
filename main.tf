@@ -134,7 +134,7 @@ resource "aws_iam_user" "user" {
   path  = "/system/sqs-user/${var.team_name}/"
 }
 
-resource "aws_iam_access_key" "key" {
+resource "aws_iam_access_key" "key_2023" {
   count = local.create_user
   user  = aws_iam_user.user[0].name
 }

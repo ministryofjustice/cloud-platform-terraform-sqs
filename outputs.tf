@@ -1,16 +1,16 @@
 output "user_name" {
   description = "IAM user with access to the queue"
-  value       = join("", aws_iam_user.user.*.name)
+  value       = join("", aws_iam_user.user[*].name)
 }
 
 output "access_key_id" {
   description = "Access key id for the credentials"
-  value       = join("", aws_iam_access_key.key.*.id)
+  value       = join("", aws_iam_access_key.key_2023[*].id)
 }
 
 output "secret_access_key" {
   description = "Secret for the new credentials"
-  value       = join("", aws_iam_access_key.key.*.secret)
+  value       = join("", aws_iam_access_key.key_2023[*].secret)
 }
 
 output "sqs_id" {
