@@ -6,11 +6,13 @@ output "user_name" {
 output "access_key_id" {
   description = "Access key id for the credentials"
   value       = join("", aws_iam_access_key.key.*.id)
+  sensitive   = true
 }
 
 output "secret_access_key" {
   description = "Secret for the new credentials"
   value       = join("", aws_iam_access_key.key.*.secret)
+  sensitive   = true
 }
 
 output "sqs_id" {
