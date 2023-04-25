@@ -30,3 +30,7 @@ output "sqs_name" {
   value       = aws_sqs_queue.terraform_queue.name
 }
 
+output "aws_iam_policy_arn" {
+  description = "The arn of the policy defining permissions for this SQS queue, use this policy to create IRSA based kubernetes service accounts."
+  value       = try(aws_iam_policy.irsa.arn, "")
+}

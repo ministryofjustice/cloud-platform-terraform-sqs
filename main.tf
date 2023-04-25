@@ -157,3 +157,8 @@ data "aws_iam_policy_document" "policy" {
   }
 }
 
+# This policy can be used with IRSA, see outputs
+resource "aws_iam_policy" "irsa" {
+  path   = "/cloud-platform/"
+  policy = data.aws_iam_policy_document.policy.json
+}
