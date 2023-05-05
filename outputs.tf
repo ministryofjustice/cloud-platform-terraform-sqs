@@ -30,3 +30,6 @@ output "sqs_name" {
   value       = aws_sqs_queue.terraform_queue.name
 }
 
+output "irsa_policy_arn" {
+  value = aws_iam_policy.irsa.arn
+}

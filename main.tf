@@ -1,3 +1,17 @@
+locals {
+  default_tags = {
+    # Mandatory
+    business-unit = var.business-unit
+    application   = var.application
+    is-production = var.is-production
+    owner         = var.team_name
+    namespace     = var.namespace # for billing and identification purposes
+    # Optional
+    environment-name       = var.environment-name
+    infrastructure-support = var.infrastructure-support
+  }
+}
+
 data "aws_caller_identity" "current" {}
 
 resource "random_id" "id" {
@@ -113,17 +127,10 @@ resource "aws_sqs_queue" "terraform_queue" {
   redrive_policy                    = var.redrive_policy
   fifo_queue                        = var.fifo_queue
 
-  tags = {
-    business-unit          = var.business-unit
-    application            = var.application
-    is-production          = var.is-production
-    environment-name       = var.environment-name
-    owner                  = var.team_name
-    infrastructure-support = var.infrastructure-support
-    namespace              = var.namespace
-  }
+  tags = local.default_tags
 }
 
+# Legacy long-lived credentials
 locals {
   create_user = replace(var.existing_user_name, "cp-", "") == var.existing_user_name ? 1 : 0
 }
@@ -157,3 +164,20 @@ data "aws_iam_policy_document" "policy" {
   }
 }
 
+# Short-lived credentials (IRSA)
+data "aws_iam_policy_document" "irsa" {
+  version = "2012-10-17"
+  statement {
+    sid       = "AllowSQSActions"
+    effect    = "Allow"
+    actions   = ["sqs:*"]
+    resources = [aws_sqs_queue.terraform_queue.arn]
+  }
+}
+
+resource "aws_iam_policy" "irsa" {
+  name   = "cloud-platform-sqs-${random_id.id.hex}"
+  path   = "/cloud-platform/sqs/"
+  policy = data.aws_iam_policy_document.irsa.json
+  tags   = local.default_tags
+}
