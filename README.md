@@ -170,5 +170,4 @@ No modules.
 | <a name="output_sqs_id"></a> [sqs\_id](#output\_sqs\_id) | The URL for the created Amazon SQS queue. |
 | <a name="output_sqs_name"></a> [sqs\_name](#output\_sqs\_name) | The name of the SQS queue. |
 | <a name="output_user_name"></a> [user\_name](#output\_user\_name) | IAM user with access to the queue |
-
 <!-- END_TF_DOCS -->
