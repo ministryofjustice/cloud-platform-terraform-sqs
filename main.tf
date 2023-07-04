@@ -115,8 +115,12 @@ resource "aws_kms_alias" "alias" {
   target_key_id = aws_kms_key.kms[0].key_id
 }
 
+locals {
+  queue_suffix = var.fifo_queue ? "${var.sqs_name}.fifo" : "${var.sqs_name}"
+}
+
 resource "aws_sqs_queue" "terraform_queue" {
-  name                              = "${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  name                              = "${var.team_name}-${var.environment-name}-local.queue_suffix"
   visibility_timeout_seconds        = var.visibility_timeout_seconds
   message_retention_seconds         = var.message_retention_seconds
   max_message_size                  = var.max_message_size
