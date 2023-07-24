@@ -3,18 +3,6 @@ output "user_name" {
   value       = join("", aws_iam_user.user.*.name)
 }
 
-output "access_key_id" {
-  description = "Access key id for the credentials"
-  value       = join("", aws_iam_access_key.key.*.id)
-  sensitive   = true
-}
-
-output "secret_access_key" {
-  description = "Secret for the new credentials"
-  value       = join("", aws_iam_access_key.key.*.secret)
-  sensitive   = true
-}
-
 output "sqs_id" {
   description = "The URL for the created Amazon SQS queue."
   value       = aws_sqs_queue.terraform_queue.id
