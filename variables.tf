@@ -1,29 +1,6 @@
-variable "application" {}
-
-variable "business-unit" {
-  description = "Area of the MOJ responsible for the service."
-  default     = "mojdigital"
-}
-
-variable "namespace" {
-}
-
-variable "team_name" {
-  description = "The name of your development team"
-}
-
-variable "environment-name" {
-  description = "The type of environment you're deploying to."
-}
-
-variable "infrastructure-support" {
-  description = "The team responsible for managing the infrastructure. Should be of the form team-email."
-}
-
-variable "is-production" {
-  default = "false"
-}
-
+#################
+# Configuration #
+#################
 variable "visibility_timeout_seconds" {
   description = "The visibility timeout for the queue. An integer from 0 to 43200 (12 hours)."
   default     = "30"
@@ -84,4 +61,44 @@ variable "fifo_queue" {
   description = "FIFO means exactly-once processing. Duplicates are not introduced into the queue."
   type        = bool
   default     = false
+}
+
+########
+# Tags #
+########
+variable "business-unit" {
+  description = "Area of the MOJ responsible for the service"
+  type        = string
+  default     = "mojdigital"
+}
+
+variable "application" {
+  description = "Application name"
+  type        = string
+}
+
+variable "is-production" {
+  description = "Whether this is used for production or not"
+  type        = string
+  default     = false # to remove, but to retain for now (until variables moved to snake case)
+}
+
+variable "team_name" {
+  description = "Team name"
+  type        = string
+}
+
+variable "namespace" {
+  description = "Namespace name"
+  type        = string
+}
+
+variable "environment-name" {
+  description = "Environment name"
+  type        = string
+}
+
+variable "infrastructure-support" {
+  description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
+  type        = string
 }

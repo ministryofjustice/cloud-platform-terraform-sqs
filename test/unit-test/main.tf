@@ -31,4 +31,3 @@ module "sqs" {
   infrastructure-support = "platform@digtal.justice.gov.uk"
   namespace              = "cloud-platform"
 }
-
