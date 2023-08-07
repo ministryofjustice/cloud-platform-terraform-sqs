@@ -20,7 +20,7 @@ module "example_sqs" {
   encrypt_sqs_kms = "false"
 
   # existing_user_name     = module.another_sqs_instance.user_name
-  
+
   # NB: If you want multiple queues to share an IAM user, you must create one queue first,
   # letting it create the IAM user. Then, in a separate PR, you can create all the other
   # queues. Otherwise terraform cannot resolve the cyclic dependency of creating multiple
@@ -100,7 +100,7 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 
 - https://docs.aws.amazon.com/sqs/
 
-<!--- BEGIN_TF_DOCS --->
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -170,5 +170,4 @@ No modules.
 | <a name="output_sqs_id"></a> [sqs\_id](#output\_sqs\_id) | The URL for the created Amazon SQS queue. |
 | <a name="output_sqs_name"></a> [sqs\_name](#output\_sqs\_name) | The name of the SQS queue. |
 | <a name="output_user_name"></a> [user\_name](#output\_user\_name) | IAM user with access to the queue |
-
-<!--- END_TF_DOCS --->
+<!-- END_TF_DOCS -->
