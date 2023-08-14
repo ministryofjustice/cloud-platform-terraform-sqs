@@ -24,10 +24,10 @@ module "sqs" {
 
   sqs_name               = "unit-test"
   team_name              = "cloud-platform"
-  environment-name       = "development"
-  is-production          = "false"
-  business-unit          = "mojdigital"
+  environment_name       = "development"
+  is_production          = "false"
+  business_unit          = "mojdigital"
   application            = "cloud-platform-terraform-sqs"
-  infrastructure-support = "platform@digtal.justice.gov.uk"
+  infrastructure_support = "platform@digtal.justice.gov.uk"
   namespace              = "cloud-platform"
 }

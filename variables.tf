@@ -66,10 +66,9 @@ variable "fifo_queue" {
 ########
 # Tags #
 ########
-variable "business-unit" {
+variable "business_unit" {
   description = "Area of the MOJ responsible for the service"
   type        = string
-  default     = "mojdigital"
 }
 
 variable "application" {
@@ -77,10 +76,9 @@ variable "application" {
   type        = string
 }
 
-variable "is-production" {
+variable "is_production" {
   description = "Whether this is used for production or not"
   type        = string
-  default     = false # to remove, but to retain for now (until variables moved to snake case)
 }
 
 variable "team_name" {
@@ -93,12 +91,12 @@ variable "namespace" {
   type        = string
 }
 
-variable "environment-name" {
+variable "environment_name" {
   description = "Environment name"
   type        = string
 }
 
-variable "infrastructure-support" {
+variable "infrastructure_support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
   type        = string
 }
