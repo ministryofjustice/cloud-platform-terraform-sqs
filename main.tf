@@ -111,7 +111,7 @@ resource "aws_kms_key" "kms" {
 
 resource "aws_kms_alias" "alias" {
   count         = var.encrypt_sqs_kms ? 1 : 0
-  name          = "alias/${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  name          = "alias/${var.team_name}-${var.environment-name}-${replace(var.sqs_name, ".", "-")}" # a key alias can't use a "." in the name, so this replaces the "." with a "-" if the sqs_name is set to ".fifo"
   target_key_id = aws_kms_key.kms[0].key_id
 }
 
