@@ -1,6 +1,6 @@
 # cloud-platform-terraform-sqs
 
-[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-sqs/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-sqs/releases)
+[![Releases](https://img.shields.io/github/v/release/ministryofjustice/cloud-platform-terraform-sqs.svg)](https://github.com/ministryofjustice/cloud-platform-terraform-sqs/releases)
 
 This Terraform module will create an [Amazon Simple Queue Service (SQS)](https://aws.amazon.com/sqs/) queue for use on the Cloud Platform.
 
@@ -158,4 +158,4 @@ You should use your namespace variables to populate these. See the [Usage](#usag
 ## Reading Material
 
 - [Cloud Platform user guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
-- [Amazon Simple Queue Service developer guide](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
+- [Amazon Simple Queue Service (SQS) developer guide](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
