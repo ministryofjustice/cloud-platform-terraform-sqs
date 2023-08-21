@@ -1,36 +1,57 @@
 #################
 # Configuration #
 #################
+
+# Resource variables
 variable "visibility_timeout_seconds" {
   description = "The visibility timeout for the queue. An integer from 0 to 43200 (12 hours)."
-  default     = "30"
+  default     = 30
+  type        = number
 }
 
 variable "message_retention_seconds" {
   description = "The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days)."
-  default     = "345600"
+  default     = 345600
+  type        = number
 }
 
 variable "max_message_size" {
   description = "The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB)."
-  default     = "262144"
+  default     = 262144
+  type        = number
 }
 
 variable "delay_seconds" {
   description = "The time in seconds that the delivery of all messages in the queue will be delayed. An integer from 0 to 900 (15 minutes)."
-  default     = "0"
+  default     = 0
+  type        = number
 }
 
 variable "receive_wait_time_seconds" {
   description = "The time for which a ReceiveMessage call will wait for a message to arrive (long polling) before returning. An integer from 0 to 20 (seconds)."
-  default     = "0"
+  default     = 0
+  type        = number
+}
+
+variable "redrive_policy" {
+  description = "escaped JSON string to set up the Dead Letter Queue"
+  default     = ""
+  type        = any
+}
+
+variable "fifo_queue" {
+  description = "FIFO means exactly-once processing. Duplicates are not introduced into the queue."
+  type        = bool
+  default     = false
 }
 
 variable "kms_data_key_reuse_period_seconds" {
   description = "The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours)."
   default     = 300
+  type        = number
 }
 
+# Custom variables
 variable "kms_external_access" {
   description = "A list of external AWS principals (e.g. account ids, or IAM roles) that can access the KMS key, to enable cross-account message decryption."
   type        = list(string)
@@ -40,25 +61,16 @@ variable "kms_external_access" {
 variable "existing_user_name" {
   description = "if set, will add access to this queue to the existing user, otherwise a new one is created"
   default     = ""
-}
-
-variable "redrive_policy" {
-  description = "escaped JSON string to set up the Dead Letter Queue"
-  default     = ""
+  type        = string
 }
 
 variable "sqs_name" {
-  description = "name of the sqs queue"
+  description = "SQS queue name"
+  type        = string
 }
 
 variable "encrypt_sqs_kms" {
   description = "If set to true, this will create aws_kms_key and aws_kms_alias resources and add kms_master_key_id in aws_sqs_queue resource"
-  type        = bool
-  default     = false
-}
-
-variable "fifo_queue" {
-  description = "FIFO means exactly-once processing. Duplicates are not introduced into the queue."
   type        = bool
   default     = false
 }
