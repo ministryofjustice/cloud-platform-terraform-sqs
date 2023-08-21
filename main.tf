@@ -1,14 +1,16 @@
 locals {
+  # Tags
   default_tags = {
     # Mandatory
-    business-unit = var.business-unit
+    business-unit = var.business_unit
     application   = var.application
-    is-production = var.is-production
+    is-production = var.is_production
     owner         = var.team_name
     namespace     = var.namespace # for billing and identification purposes
+
     # Optional
-    environment-name       = var.environment-name
-    infrastructure-support = var.infrastructure-support
+    environment-name       = var.environment_name
+    infrastructure-support = var.infrastructure_support
   }
 }
 
@@ -19,7 +21,7 @@ resource "random_id" "id" {
 }
 
 resource "aws_kms_key" "kms" {
-  description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  description = "KMS key for ${var.team_name}-${var.environment_name}-${var.sqs_name}"
   count       = var.encrypt_sqs_kms ? 1 : 0
 
   policy = jsonencode({
@@ -111,12 +113,12 @@ resource "aws_kms_key" "kms" {
 
 resource "aws_kms_alias" "alias" {
   count         = var.encrypt_sqs_kms ? 1 : 0
-  name          = "alias/${var.team_name}-${var.environment-name}-${replace(var.sqs_name, ".", "-")}" # a key alias can't use a "." in the name, so this replaces the "." with a "-" if the sqs_name is set to ".fifo"
+  name          = "alias/${var.team_name}-${var.environment_name}-${replace(var.sqs_name, ".", "-")}" # a key alias can't use a "." in the name, so this replaces the "." with a "-" if the sqs_name is set to ".fifo"
   target_key_id = aws_kms_key.kms[0].key_id
 }
 
 resource "aws_sqs_queue" "terraform_queue" {
-  name                              = "${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  name                              = "${var.team_name}-${var.environment_name}-${var.sqs_name}"
   visibility_timeout_seconds        = var.visibility_timeout_seconds
   message_retention_seconds         = var.message_retention_seconds
   max_message_size                  = var.max_message_size
