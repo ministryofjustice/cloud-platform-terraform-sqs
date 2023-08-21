@@ -45,6 +45,24 @@ variable "fifo_queue" {
   default     = false
 }
 
+variable "content_based_deduplication" {
+  description = "Enables content-based deduplication for FIFO queues."
+  type        = bool
+  default     = null
+}
+
+variable "deduplication_scope" {
+  description = "Specifies whether message deduplication occurs at the message group or queue level. Valid values are `messageGroup` and `queue`."
+  type        = string
+  default     = null
+}
+
+variable "fifo_throughput_limit" {
+  description = "Specifies whether the FIFO queue throughput quota applies to the entire queue or per message group. Valid values are `perQueue` (default) and `perMessageGroupId`."
+  type        = string
+  default     = null
+}
+
 variable "kms_data_key_reuse_period_seconds" {
   description = "The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours)."
   default     = 300
