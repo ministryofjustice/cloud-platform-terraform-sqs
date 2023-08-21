@@ -1,6 +1,6 @@
 locals {
   # Generic configuration
-  queue_name = "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+  queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
 
   # Tags
   default_tags = {
@@ -125,7 +125,7 @@ resource "aws_kms_key" "kms" {
 
 resource "aws_kms_alias" "alias" {
   count         = var.encrypt_sqs_kms ? 1 : 0
-  name          = "alias/${local.queue_name}"
+  name          = "alias/${replace(local.queue_name, ".", "-")}" # aliases can't have `.` in their name, so we replace them with a `-` (useful if this is a FIFO queue)
   target_key_id = aws_kms_key.kms[0].key_id
 }
 
@@ -143,7 +143,12 @@ resource "aws_sqs_queue" "terraform_queue" {
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
   kms_master_key_id                 = var.encrypt_sqs_kms ? aws_kms_key.kms[0].arn : null
   redrive_policy                    = var.redrive_policy
-  fifo_queue                        = var.fifo_queue
+
+  # FIFO
+  fifo_queue                  = var.fifo_queue
+  content_based_deduplication = var.content_based_deduplication
+  deduplication_scope         = var.deduplication_scope
+  fifo_throughput_limit       = var.fifo_throughput_limit
 
   tags = local.default_tags
 }
