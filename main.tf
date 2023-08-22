@@ -1,25 +1,39 @@
 locals {
+  # Generic configuration
+  queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+
+  # Tags
   default_tags = {
     # Mandatory
-    business-unit = var.business-unit
+    business-unit = var.business_unit
     application   = var.application
-    is-production = var.is-production
+    is-production = var.is_production
     owner         = var.team_name
     namespace     = var.namespace # for billing and identification purposes
+
     # Optional
-    environment-name       = var.environment-name
-    infrastructure-support = var.infrastructure-support
+    environment-name       = var.environment_name
+    infrastructure-support = var.infrastructure_support
   }
 }
 
+###########################
+# Get account information #
+###########################
 data "aws_caller_identity" "current" {}
 
+########################
+# Generate identifiers #
+########################
 resource "random_id" "id" {
   byte_length = 6
 }
 
+#########################
+# Create encryption key #
+#########################
 resource "aws_kms_key" "kms" {
-  description = "KMS key for ${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  description = "KMS key for ${local.queue_name}"
   count       = var.encrypt_sqs_kms ? 1 : 0
 
   policy = jsonencode({
@@ -111,30 +125,41 @@ resource "aws_kms_key" "kms" {
 
 resource "aws_kms_alias" "alias" {
   count         = var.encrypt_sqs_kms ? 1 : 0
-  name          = "alias/${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  name          = "alias/${replace(local.queue_name, ".", "-")}" # aliases can't have `.` in their name, so we replace them with a `-` (useful if this is a FIFO queue)
   target_key_id = aws_kms_key.kms[0].key_id
 }
 
+################
+# Create queue #
+################
 resource "aws_sqs_queue" "terraform_queue" {
-  name                              = "${var.team_name}-${var.environment-name}-${var.sqs_name}"
+  name = local.queue_name
+
   visibility_timeout_seconds        = var.visibility_timeout_seconds
   message_retention_seconds         = var.message_retention_seconds
   max_message_size                  = var.max_message_size
   delay_seconds                     = var.delay_seconds
   receive_wait_time_seconds         = var.receive_wait_time_seconds
   kms_data_key_reuse_period_seconds = var.kms_data_key_reuse_period_seconds
-  kms_master_key_id                 = var.encrypt_sqs_kms ? join("", aws_kms_key.kms.*.arn) : ""
+  kms_master_key_id                 = var.encrypt_sqs_kms ? aws_kms_key.kms[0].arn : null
   redrive_policy                    = var.redrive_policy
-  fifo_queue                        = var.fifo_queue
+
+  # FIFO
+  fifo_queue                  = var.fifo_queue
+  content_based_deduplication = var.content_based_deduplication
+  deduplication_scope         = var.deduplication_scope
+  fifo_throughput_limit       = var.fifo_throughput_limit
 
   tags = local.default_tags
 }
 
-# Short-lived credentials (IRSA)
+##############################
+# Create IAM role for access #
+##############################
 data "aws_iam_policy_document" "irsa" {
   version = "2012-10-17"
   statement {
-    sid       = "AllowSQSActions"
+    sid       = "AllowSQSActionsFor${random_id.id.hex}" # this is set to include the hex, so you can merge policies
     effect    = "Allow"
     actions   = ["sqs:*"]
     resources = [aws_sqs_queue.terraform_queue.arn]
