@@ -153,40 +153,6 @@ resource "aws_sqs_queue" "terraform_queue" {
   tags = local.default_tags
 }
 
-# Legacy long-lived credentials
-locals {
-  create_user = replace(var.existing_user_name, "cp-", "") == var.existing_user_name ? 1 : 0
-}
-
-resource "aws_iam_user" "user" {
-  count = local.create_user
-  name  = "cp-sqs-${random_id.id.hex}"
-  path  = "/system/sqs-user/${var.team_name}/"
-}
-
-resource "aws_iam_access_key" "key" {
-  count = local.create_user
-  user  = aws_iam_user.user[0].name
-}
-
-resource "aws_iam_user_policy" "userpol" {
-  name   = aws_sqs_queue.terraform_queue.name
-  policy = data.aws_iam_policy_document.policy.json
-  user   = local.create_user == 1 ? join("", aws_iam_user.user.*.name) : var.existing_user_name
-}
-
-data "aws_iam_policy_document" "policy" {
-  statement {
-    actions = [
-      "sqs:*",
-    ]
-
-    resources = [
-      aws_sqs_queue.terraform_queue.arn,
-    ]
-  }
-}
-
 ##############################
 # Create IAM role for access #
 ##############################
