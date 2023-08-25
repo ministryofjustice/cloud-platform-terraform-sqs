@@ -31,6 +31,6 @@ output "sqs_name" {
 }
 
 output "irsa_policy_arn" {
-  description = "IAM role ARN for use with IRSA"
+  description = "IAM policy ARN for access to the SQS queue"
   value       = aws_iam_policy.irsa.arn
 }
