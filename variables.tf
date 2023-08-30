@@ -76,12 +76,6 @@ variable "kms_external_access" {
   default     = []
 }
 
-variable "existing_user_name" {
-  description = "if set, will add access to this queue to the existing user, otherwise a new one is created"
-  default     = ""
-  type        = string
-}
-
 variable "sqs_name" {
   description = "SQS queue name"
   type        = string
