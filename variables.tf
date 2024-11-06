@@ -124,3 +124,9 @@ variable "infrastructure_support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
   type        = string
 }
+
+variable "github_team" {
+  description = "The slug of the GitHub team with access to the SQS queue via the AWS Console"
+  type        = string
+  default     = null
+}
