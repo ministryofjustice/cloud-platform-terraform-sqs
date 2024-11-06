@@ -14,6 +14,7 @@ locals {
     # Optional
     environment-name       = var.environment_name
     infrastructure-support = var.infrastructure_support
+    GithubTeam             = var.github_team
   }
 }
 
