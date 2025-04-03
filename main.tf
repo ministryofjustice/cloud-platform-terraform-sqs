@@ -152,6 +152,10 @@ resource "aws_sqs_queue" "terraform_queue" {
   fifo_throughput_limit       = var.fifo_throughput_limit
 
   tags = local.default_tags
+
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 ##############################
