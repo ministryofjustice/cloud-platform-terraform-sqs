@@ -133,6 +133,7 @@ No modules.
 | <a name="input_redrive_policy"></a> [redrive\_policy](#input\_redrive\_policy) | escaped JSON string to set up the Dead Letter Queue | `any` | `""` | no |
 | <a name="input_sqs_name"></a> [sqs\_name](#input\_sqs\_name) | SQS queue name | `string` | n/a | yes |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Team name | `string` | n/a | yes |
+| <a name="input_use_cloud_platform_naming"></a> [use\_cloud\_platform\_naming](#input\_use\_cloud\_platform\_naming) | Optional override of the default ECR naming convention ([team-name]/[namespace]). | `bool` | `false` | no |
 | <a name="input_visibility_timeout_seconds"></a> [visibility\_timeout\_seconds](#input\_visibility\_timeout\_seconds) | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). | `number` | `30` | no |
 
 ## Outputs
