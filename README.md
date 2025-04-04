@@ -126,6 +126,7 @@ No modules.
 | <a name="input_is_production"></a> [is\_production](#input\_is\_production) | Whether this is used for production or not | `string` | n/a | yes |
 | <a name="input_kms_data_key_reuse_period_seconds"></a> [kms\_data\_key\_reuse\_period\_seconds](#input\_kms\_data\_key\_reuse\_period\_seconds) | The length of time, in seconds, for which Amazon SQS can reuse a data key to encrypt or decrypt messages before calling AWS KMS again. An integer representing seconds, between 60 seconds (1 minute) and 86,400 seconds (24 hours). | `number` | `300` | no |
 | <a name="input_kms_external_access"></a> [kms\_external\_access](#input\_kms\_external\_access) | A list of external AWS principals (e.g. account ids, or IAM roles) that can access the KMS key, to enable cross-account message decryption. | `list(string)` | `[]` | no |
+| <a name="input_legacy_sqs_naming"></a> [legacy\_sqs\_naming](#input\_legacy\_sqs\_naming) | If true, use the legacy SQS naming convention (team-name). | `bool` | `false` | no |
 | <a name="input_max_message_size"></a> [max\_message\_size](#input\_max\_message\_size) | The limit of how many bytes a message can contain before Amazon SQS rejects it. An integer from 1024 bytes (1 KiB) up to 262144 bytes (256 KiB). | `number` | `262144` | no |
 | <a name="input_message_retention_seconds"></a> [message\_retention\_seconds](#input\_message\_retention\_seconds) | The number of seconds Amazon SQS retains a message. Integer representing seconds, from 60 (1 minute) to 1209600 (14 days). | `number` | `345600` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | Namespace name | `string` | n/a | yes |
@@ -133,7 +134,6 @@ No modules.
 | <a name="input_redrive_policy"></a> [redrive\_policy](#input\_redrive\_policy) | escaped JSON string to set up the Dead Letter Queue | `any` | `""` | no |
 | <a name="input_sqs_name"></a> [sqs\_name](#input\_sqs\_name) | SQS queue name | `string` | n/a | yes |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Team name | `string` | n/a | yes |
-| <a name="input_use_cloud_platform_naming"></a> [use\_cloud\_platform\_naming](#input\_use\_cloud\_platform\_naming) | Optional override of the default ECR naming convention ([team-name]/[namespace]). | `bool` | `false` | no |
 | <a name="input_visibility_timeout_seconds"></a> [visibility\_timeout\_seconds](#input\_visibility\_timeout\_seconds) | The visibility timeout for the queue. An integer from 0 to 43200 (12 hours). | `number` | `30` | no |
 
 ## Outputs
