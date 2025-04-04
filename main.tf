@@ -1,7 +1,14 @@
 locals {
   # Generic configuration
-  queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+  # queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+  change_team_name = var.use_cloud_platform_naming ? "cloud-platform" : var.team_name
 
+  # Construct the queue name, adding ".fifo" if needed
+  queue_name = var.fifo_queue ? (
+    "${local.change_team_name}-${var.environment_name}-${var.sqs_name}.fifo"
+    ) : (
+    "${local.change_team_name}-${var.environment_name}-${var.sqs_name}"
+  )
   # Tags
   default_tags = {
     # Mandatory
@@ -152,6 +159,11 @@ resource "aws_sqs_queue" "terraform_queue" {
   fifo_throughput_limit       = var.fifo_throughput_limit
 
   tags = local.default_tags
+
+
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 ##############################

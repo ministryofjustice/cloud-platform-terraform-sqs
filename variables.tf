@@ -130,3 +130,9 @@ variable "github_team" {
   type        = string
   default     = null
 }
+
+variable "use_cloud_platform_naming" {
+  description = "Optional override of the default ECR naming convention ([team-name]/[namespace])."
+  type        = bool
+  default     = false
+}
