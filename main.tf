@@ -1,14 +1,15 @@
 locals {
   # Generic configuration
   # queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
-  change_team_name = var.use_cloud_platform_naming ? "cloud-platform" : var.team_name
+  # By default, use "cloud-platform" for all new SQS resources
+  effective_team_name = var.legacy_sqs_naming == true ? var.team_name : "cloud-platform"
 
-  # Construct the queue name, adding ".fifo" if needed
-  queue_name = var.fifo_queue ? (
-    "${local.change_team_name}-${var.environment_name}-${var.sqs_name}.fifo"
-    ) : (
-    "${local.change_team_name}-${var.environment_name}-${var.sqs_name}"
-  )
+  # Construct the queue name based on effective team name, environment, and SQS name
+  queue_name = "${local.effective_team_name}-${var.environment_name}-${var.sqs_name}"
+
+  # Add ".fifo" if the queue is a FIFO queue
+  queue_name_with_fio = var.fifo_queue ? "${local.queue_name}.fifo" : local.queue_name
+
   # Tags
   default_tags = {
     # Mandatory

@@ -131,8 +131,8 @@ variable "github_team" {
   default     = null
 }
 
-variable "use_cloud_platform_naming" {
-  description = "Optional override of the default ECR naming convention ([team-name]/[namespace])."
+variable "legacy_sqs_naming" {
+  description = "If true, use the legacy SQS naming convention (team-name)."
   type        = bool
   default     = false
 }
