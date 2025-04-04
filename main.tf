@@ -1,6 +1,15 @@
 locals {
   # Generic configuration
-  queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+  # queue_name = var.fifo_queue ? "${var.team_name}-${var.environment_name}-${var.sqs_name}.fifo" : "${var.team_name}-${var.environment_name}-${var.sqs_name}"
+  effective_team_name = var.use_cloud_platform_naming ? "cloud-platform" : var.team_name
+
+  # Construct the queue name, adding ".fifo" if needed
+  queue_name = var.fifo_queue ? (
+    "${local.effective_team_name}-${var.environment_name}-${var.sqs_name}.fifo"
+    ) : (
+    "${local.effective_team_name}-${var.environment_name}-${var.sqs_name}"
+  )
+
 
   # Tags
   default_tags = {
