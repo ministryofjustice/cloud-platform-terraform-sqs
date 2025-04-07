@@ -130,3 +130,9 @@ variable "github_team" {
   type        = string
   default     = null
 }
+
+variable "use_team_name" {
+  description = "If true, use the team name in the SQS naming convention (legacy)."
+  type        = bool
+  default     = false
+}
