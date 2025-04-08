@@ -151,7 +151,14 @@ Some of the inputs for this module are tags. All infrastructure resources must b
 
 You should use your namespace variables to populate these. See the [Usage](#usage) section for more information.
 
+## Team name caveat
+
+This module utilises your environemnt `team_name` variable in the naming of your SQS topic, in the format `cloud-platform-<var.team_name>-<var.environment_name><ar.sqs_name>`. This historically introduced an issue whereby a team name change would result in Terraform forcefully replacing the SQS topic. To get around this issue, a [lifecycle](https://developer.hashicorp.com/terraform/language/meta-arguments/lifecycle) `ignore_changes` block has been introduced, so that team name changes can be made without causing this issue.
+
+However, its important to note that if you do change the team name in your environment variables, it will not be reflected in the SQS topic name. If you want to update the name, you will need to look at deleting and recreating your SQS topic(s).
+
 ## Reading Material
 
 - [Cloud Platform user guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
 - [Amazon Simple Queue Service (SQS) developer guide](https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/welcome.html)
+
